@@ -1,28 +1,34 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Age Verification - Content Rating</title>
+    <title>Age Verification - Secure Access</title>
     <style>
-        body { background-color: #111; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .box { text-align: center; border: 1px solid #444; padding: 40px; border-radius: 10px; background: #222; max-width: 400px; }
-        h1 { font-size: 24px; margin-bottom: 20px; }
-        p { color: #aaa; font-size: 14px; line-height: 1.6; }
-        .btns { margin-top: 30px; display: flex; gap: 10px; justify-content: center; }
-        .btn { padding: 12px 30px; border-radius: 5px; cursor: pointer; text-decoration: none; font-weight: bold; }
-        .enter { background: #ff0050; color: white; border: none; }
-        .leave { background: #444; color: #ccc; border: none; }
+        body { background-color: #111; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .box { text-align: center; border: 1px solid #333; padding: 50px 30px; border-radius: 12px; background: #1a1a1a; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { font-size: 28px; margin-bottom: 15px; letter-spacing: 1px; }
+        p { color: #888; font-size: 15px; line-height: 1.5; margin-bottom: 30px; }
+        .btns { display: flex; flex-direction: column; gap: 15px; }
+        .btn { padding: 15px; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: bold; transition: 0.3s; text-transform: uppercase; font-size: 14px; }
+        .enter { background: #e91e63; color: white; border: none; }
+        .enter:hover { background: #ff4081; }
+        .leave { background: transparent; color: #666; border: 1px solid #444; }
+        .leave:hover { color: #999; border-color: #666; }
+        .footer-text { margin-top: 25px; font-size: 11px; color: #444; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h1>Are you over 18 years old?</h1>
-        <p>This website contains adult content and is only accessible to adults. If you are under 18, please leave immediately.</p>
+        <h1>AGE VERIFICATION</h1>
+        <p>This portal contains age-restricted content. You must be at least 18 years old to proceed.</p>
         <div class="btns">
-            <!-- 这里填你的 Stripchat 推广链接 -->
-            <a href="https://" class="btn enter">Over 18 years old</a>
+            <!-- PLACEHOLDER FOR CRAKREVENUE SMARTLINK -->
+            <a href="#" class="btn enter">I am 18 or older - Enter</a>
             <a href="https://google.com" class="btn leave">Exit</a>
+        </div>
+        <div class="footer-text">
+            © 2024 SecureContent Verification System. All rights reserved.
         </div>
     </div>
 </body>
