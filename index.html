@@ -3,36 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Age Verification - Secure Access</title>
+    <title>Community Access - Secure Verification</title>
+    
+    <!-- 1. 社交媒体预览优化 (FB/X 抓取时显示的内容) -->
+    <meta property="og:title" content="Secure Access Portal">
+    <meta property="og:description" content="Verify your age to access the community.">
+    <meta property="og:image" content="https://images.unsplash.com"> <!-- 建议换成更吸引人的合规图 -->
+    <meta name="twitter:card" content="summary_large_image">
+
     <style>
-        body { background-color: #111; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .box { text-align: center; border: 1px solid #333; padding: 50px 30px; border-radius: 12px; background: #1a1a1a; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h1 { font-size: 28px; margin-bottom: 15px; letter-spacing: 1px; }
-        p { color: #888; font-size: 15px; line-height: 1.5; margin-bottom: 30px; }
-        .btns { display: flex; flex-direction: column; gap: 15px; }
-        .btn { padding: 15px; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: bold; transition: 0.3s; text-transform: uppercase; font-size: 14px; }
-        .enter { background: #e91e63; color: white; border: none; }
-        .enter:hover { background: #ff4081; }
-        .leave { background: transparent; color: #666; border: 1px solid #444; }
-        .leave:hover { color: #999; border-color: #666; }
-        .footer-text { margin-top: 25px; font-size: 11px; color: #444; }
+        body { background-color: #0f0f0f; color: #ffffff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .box { text-align: center; border: 1px solid #2a2a2a; padding: 40px 30px; border-radius: 16px; background: #161616; max-width: 400px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+        .icon { font-size: 48px; margin-bottom: 20px; color: #e91e63; }
+        h1 { font-size: 24px; margin-bottom: 15px; font-weight: 700; letter-spacing: -0.5px; }
+        p { color: #a0a0a0; font-size: 14px; line-height: 1.6; margin-bottom: 35px; }
+        .btns { display: flex; flex-direction: column; gap: 12px; }
+        .btn { padding: 16px; border-radius: 8px; cursor: pointer; text-decoration: none; font-weight: 600; transition: all 0.2s ease; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; }
+        
+        /* 这里的颜色建议根据你的流量类型调整：Dating建议粉/红，Mainstream建议蓝 */
+        .enter { background: #e91e63; color: white; border: none; box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3); }
+        .enter:hover { background: #ff4081; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4); }
+        .enter:active { transform: translateY(0); }
+        
+        .leave { background: #252525; color: #888; border: 1px solid #333; }
+        .leave:hover { background: #333; color: #bbb; }
+        
+        .footer-text { margin-top: 30px; font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* 加载动画样式 */
+        .loading-text { display: none; }
     </style>
 </head>
 <body>
     <div class="box">
+        <div class="icon">🔞</div>
         <h1>AGE VERIFICATION</h1>
-        <p>This portal contains age-restricted content. You must be at least 18 years old to proceed.</p>
+        <p>This content is age-restricted. By clicking enter, you certify that you are <strong>18 years of age or older</strong> and agree to our terms of service.</p>
+        
         <div class="btns">
-            <!-- PLACEHOLDER FOR CRAKREVENUE SMARTLINK -->
-            <a href="#" class="btn enter">I am 18 or older - Enter</a>
+            <!-- 2. 将此处的 URL 替换为你的 LosPollos SmartLink -->
+            <a href="https://你的LosPollos链接" 
+               id="enterBtn"
+               class="btn enter" 
+               rel="nofollow noopener noreferrer">
+               <span class="btn-text">I am 18 or older - Enter</span>
+               <span class="loading-text">Verifying...</span>
+            </a>
+            
             <a href="https://google.com" class="btn leave">Exit</a>
         </div>
+        
         <div class="footer-text">
-            © 2024 SecureContent Verification System. All rights reserved.
+            © 2024 SecureContent ID System<br>
+            Encrypted Connection Verified
         </div>
     </div>
+
+    <script>
+        // 3. 简单的点击动效，增加“真实感”并防止重复点击
+        const btn = document.getElementById('enterBtn');
+        const btnText = btn.querySelector('.btn-text');
+        const loadingText = btn.querySelector('.loading-text');
+
+        btn.addEventListener('click', function(e) {
+            btnText.style.display = 'none';
+            loadingText.style.display = 'inline-block';
+            btn.style.opacity = '0.8';
+            btn.style.pointerEvents = 'none';
+            
+            // 延迟一小会儿再跳转，让用户觉得系统在“验证”身份，提高心理预期收益
+            setTimeout(() => {
+                // 如果需要更高级的跳转逻辑可以在这里处理
+            }, 500);
+        });
+    </script>
 </body>
 </html>
-
-
-
