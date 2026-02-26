@@ -2,81 +2,200 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Community Access - Secure Verification</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SocialConnect - Verified Community</title>
     
-    <!-- 1. 社交媒体预览优化 (FB/X 抓取时显示的内容) -->
-    <meta property="og:title" content="Secure Access Portal">
-    <meta property="og:description" content="Verify your age to access the community.">
-    <meta property="og:image" content="https://images.unsplash.com"> <!-- 建议换成更吸引人的合规图 -->
-    <meta name="twitter:card" content="summary_large_image">
-
     <style>
-        body { background-color: #0f0f0f; color: #ffffff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .box { text-align: center; border: 1px solid #2a2a2a; padding: 40px 30px; border-radius: 16px; background: #161616; max-width: 400px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
-        .icon { font-size: 48px; margin-bottom: 20px; color: #e91e63; }
-        h1 { font-size: 24px; margin-bottom: 15px; font-weight: 700; letter-spacing: -0.5px; }
-        p { color: #a0a0a0; font-size: 14px; line-height: 1.6; margin-bottom: 35px; }
-        .btns { display: flex; flex-direction: column; gap: 12px; }
-        .btn { padding: 16px; border-radius: 8px; cursor: pointer; text-decoration: none; font-weight: 600; transition: all 0.2s ease; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; }
+        :root { --accent-color: #ff2d55; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* 这里的颜色建议根据你的流量类型调整：Dating建议粉/红，Mainstream建议蓝 */
-        .enter { background: #e91e63; color: white; border: none; box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3); }
-        .enter:hover { background: #ff4081; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4); }
-        .enter:active { transform: translateY(0); }
-        
-        .leave { background: #252525; color: #888; border: 1px solid #333; }
-        .leave:hover { background: #333; color: #bbb; }
-        
-        .footer-text { margin-top: 30px; font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* 加载动画样式 */
-        .loading-text { display: none; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background-color: #000;
+            font-family: -apple-system, system-ui, sans-serif;
+            color: #fff; overflow: hidden;
+        }
+
+        /* 核心防御：极其模糊的背景，避开图像算法 */
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(0,0,0,0.1), #000), 
+                        url('https://images.pexels.com');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            filter: blur(40px); /* 初始极度模糊，审核机器看不出内容 */
+            transition: filter 1s;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px 25px;
+        }
+
+        .header-box { margin-bottom: 30px; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 { font-size: 34px; margin: 0 0 10px; font-weight: 800; letter-spacing: -0.5px; }
+        p { color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1.4; margin-bottom: 30px; }
+
+        /* 人工交互区：爬虫一般不勾选 */
+        .check-area {
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+        }
+        .check-area input { accent-color: var(--accent-color); }
+
+        .cta-button {
+            width: 100%;
+            height: 65px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 18px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255,45,85,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cta-button:active { transform: scale(0.98); }
+
+        .loader {
+            display: none;
+            width: 20px; height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .footer-links {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 11px;
+            opacity: 0.3;
+        }
+        .footer-links a { color: #fff; text-decoration: none; }
+
+        /* 备用合规模式：如果是PC访问展示这个 */
+        #safeMode {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; color: #333;
+            z-index: 9999; padding: 50px;
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <div class="icon">🔞</div>
-        <h1>AGE VERIFICATION</h1>
-        <p>This content is age-restricted. By clicking enter, you certify that you are <strong>18 years of age or older</strong> and agree to our terms of service.</p>
-        
-        <div class="btns">
-            <!-- 2. 将此处的 URL 替换为你的 LosPollos SmartLink -->
-            <a href="https://www.instagram.com" 
-               id="enterBtn"
-               class="btn enter" 
-               rel="nofollow noopener noreferrer">
-               <span class="btn-text">I am 18 or older - Enter</span>
-               <span class="loading-text">Verifying...</span>
-            </a>
-            
-            <a href="https://google.com" class="btn leave">Exit</a>
+
+    <!-- 伪装成PC端看到的普通页面 -->
+    <div id="safeMode">
+        <h1>403 Forbidden</h1>
+        <p>Access denied. This content is optimized for mobile devices only.</p>
+    </div>
+
+    <div class="bg-layer" id="bg"></div>
+
+    <div class="container">
+        <div class="header-box">
+            <div class="badge">Verified Members Only</div>
+            <h1>Meet Real People</h1>
+            <p>Join our secure community to discover and connect with people near you.</p>
         </div>
-        
-        <div class="footer-text">
-            © 2024 SecureContent ID System<br>
-            Encrypted Connection Verified
+
+        <div class="check-area">
+            <input type="checkbox" id="consent">
+            <label for="consent">I am over 18 and agree to the terms.</label>
+        </div>
+
+        <button id="mainBtn" class="cta-button">
+            <span id="btnText">Continue to Community</span>
+            <div id="btnLoading" class="loader"></div>
+        </button>
+
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Support</a>
         </div>
     </div>
 
     <script>
-        // 3. 简单的点击动效，增加“真实感”并防止重复点击
-        const btn = document.getElementById('enterBtn');
-        const btnText = btn.querySelector('.btn-text');
-        const loadingText = btn.querySelector('.loading-text');
+        const _u = "aHR0cHM6Ly9nby5tYXZydHJhY2t0b3IuY29tP3VzZXJJZD03ZTIzOTQ0MmRkMDJmNTBiNmZiYmQwNmY5NzlmM2U5ZmIyZDZmM2Y5Zjc0NjZjZTEyNDAwMTI0MjZkZWIwNGNj";
 
-        btn.addEventListener('click', function(e) {
-            btnText.style.display = 'none';
-            loadingText.style.display = 'inline-block';
-            btn.style.opacity = '0.8';
-            btn.style.pointerEvents = 'none';
+        // 防御 1: 环境检测（拦截 PC 审核员）
+        const isMobile = /iPhone|Android|Mobile/i.test(navigator.userAgent);
+        if (!isMobile) {
+            document.getElementById('safeMode').style.display = 'block';
+        }
+
+        const btn = document.getElementById('mainBtn');
+        const bg = document.getElementById('bg');
+
+        // 交互触发：用户点击时才清晰背景，防止静态抓取
+        btn.addEventListener('touchstart', () => {
+            bg.style.filter = 'blur(5px)';
+        });
+
+        btn.addEventListener('click', function() {
+            const isChecked = document.getElementById('consent').checked;
             
-            // 延迟一小会儿再跳转，让用户觉得系统在“验证”身份，提高心理预期收益
+            // 防御 2: 强制交互拦截（爬虫通常不勾选复选框）
+            if (!isChecked) {
+                alert("Please confirm you are 18+ to proceed.");
+                return;
+            }
+
+            // 防御 3: 时间段过滤（可选：深夜不跳转，躲避某些时段的强审）
+            // const hour = new Date().getHours();
+            // if(hour < 6) { window.location.href = "https://google.com"; return; }
+
+            document.getElementById('btnText').style.display = 'none';
+            document.getElementById('btnLoading').style.display = 'block';
+            this.style.pointerEvents = 'none';
+
+            // 防御 4: 二次确认确认（拦截简单自动化脚本）
             setTimeout(() => {
-                // 如果需要更高级的跳转逻辑可以在这里处理
+                if (window.confirm("Redirecting to the private community. Continue?")) {
+                    try {
+                        // 使用 replace 隐藏来源，并解码跳转
+                        window.location.replace(atob(_u));
+                    } catch(e) {
+                        window.location.href = "https://www.bing.com";
+                    }
+                } else {
+                    location.reload();
+                }
             }, 500);
         });
     </script>
 </body>
 </html>
-
